@@ -3103,7 +3103,7 @@ if (document.readyState !== "loading" &&
 
 <slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>What are R Packages?</h2></hgroup><article  id="what-are-r-packages">
 
-</article></slide><slide class=""><hgroup><h2>R Packages</h2></hgroup><article  class="build" id="r-packages">
+</article></slide><slide class=""><hgroup><h2>R Packages</h2></hgroup><article  id="r-packages" class="build">
 
 <ol class = 'build'>
 <li>Sets of Functions</li>
@@ -3213,6 +3213,9 @@ if (document.readyState !== "loading" &&
 </ul></li>
 </ul>
 
+<pre class = 'prettyprint lang-r'>usethis::use_package(&quot;tidyr&quot;, type = &quot;Imports&quot;)
+usethis::use_package(&quot;dplyr&quot;, type = &quot;Suggests&quot;)</pre>
+
 </article></slide><slide class=""><hgroup><h2>Description</h2></hgroup><article  id="description">
 
 <p>Change the <code>Description</code> so that it’s a sentence and it ends with a period. Also I keep putting single quotes around weird words (like science-specific). Make sure to put links in angle brackets (<code>&lt;http...&gt;</code>). Use DOIs if you can. If you go too long on a line, indent it with 4 spaces <code>&quot;    &quot;</code>.</p>
@@ -3307,7 +3310,10 @@ if (document.readyState !== "loading" &&
 <li>See <code>#&#39; @inheritParams</code> for different functions with the same arguments.</li>
 <li>Add <code>verbose</code> argument for printing</li>
 <li>Use <code>message</code> (not <code>cat</code>) for printing. Someone can use <code>suppressMessages</code> to stop the printing.</li>
+<li>Pass <code>...</code> to a main function for additional options for the user.</li>
 <li>Have examples</li>
+<li>Learn <code>do.call(FUNCTION, args = list_of_arguments)</code></li>
+<li>Notify/warn/message whenever you have to.</li>
 </ol>
 
 </article></slide><slide class=""><hgroup><h2>NAMESPACE</h2></hgroup><article  id="namespace">
@@ -3421,6 +3427,44 @@ if (document.readyState !== "loading" &&
 
 <pre >## Error in system.file(&quot;extdata&quot;, &quot;asdfsdf.csv&quot;, package = &quot;readr&quot;, mustWork = TRUE): no file found</pre>
 
+</article></slide><slide class=""><hgroup><h2>Using the file system</h2></hgroup><article  id="using-the-file-system">
+
+<ol>
+<li><code>file.path</code> &gt; <code>paste</code> for paths</li>
+<li>Use <code>file.exists</code>. Use <code>any</code> and <code>all</code></li>
+<li><code>file.remove</code> if you need to delete things</li>
+<li>Make temporary (empty, non-existent) files, with extension: <code>tempfile(fileext = &quot;.csv&quot;)</code>.<br/></li>
+<li><code>dir.create</code> to create and <code>unlink</code> to destroy directories.</li>
+<li>Using <code>tempdir</code> for stuff that’s intermediate.<br/></li>
+<li>Tempdir sub-directory: <code>tdir = tempfile(); dir.create(tdir); on.exit({ unlink(tdir) })</code></li>
+<li><code>file.copy</code> and <code>file.rename</code></li>
+<li><code>download.file</code> or <code>httr::GET</code>.</li>
+</ol>
+
+</article></slide><slide class=""><hgroup><h2>Unit tests</h2></hgroup><article  id="unit-tests">
+
+<p>The <code>testthat</code> package is great for unit testing. Put test scripts in <code>tests/testthat</code>, always named <code>test-DESCRIPTOR.R</code>. To set up <code>testthat</code>:</p>
+
+<pre >usethis::use_testthat()</pre>
+
+<p>And a specific test:</p>
+
+<pre >usethis::use_test(&quot;name of test&quot;)</pre>
+
+<p><strong>General Rule: Any package issue turns into a test.</strong></p>
+
+</article></slide><slide class=""><hgroup><h2>Unit tests</h2></hgroup><article  id="unit-tests-1">
+
+<p>The <code>testthat</code> package is great for unit testing. Put test scripts in <code>tests/testthat</code>, always named <code>test-DESCRIPTOR.R</code>. To set up <code>testthat</code>:</p>
+
+<pre >testthat::context(&quot;OVERALL DESCRIPTION OF TESTS IN THIS FILE&quot;)
+testthat::test_that(&quot;Description of this test&quot;, { MYCODE })
+testthat::expect_equal(OUTPUT, 1234.34535)
+testthat::expect_identcal(OUTPUT1, OUTPUT2)
+testthat::expect_true(SOME_OUTPUT)
+testthat::expect_silent({ no_warning_error_code })
+testthat::expect_message({ some_warn }, &quot;a[test]regexp&quot;)</pre>
+
 </article></slide><slide class=""><hgroup><h2>Continuous integration (Thoughtworks.com)</h2></hgroup><article  id="continuous-integration-thoughtworks.com">
 
 <blockquote>
@@ -3434,7 +3478,6 @@ usethis::use_github() # must have GITHUB_PAT set up
 usethis::use_github(protocol = &quot;https&quot;) # must have GITHUB_PAT set up
 usethis::use_readme_rmd()
 usethis::use_vignette(&quot;my-vignette&quot;)
-usethis::use_testthat()
 usethis::use_appveyor()
 usethis::use_travis()</pre>
 

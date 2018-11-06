@@ -117,6 +117,11 @@ I use `Authors@R` even if there is only one author because of the [`desc` packag
   - packages with **ALL** functions loaded from package
 - Suggests: package4, package6
   - used in **examples** or **vignettes**
+  
+```r
+`r pkg_name`::use_package("tidyr", type = "Imports")
+`r pkg_name`::use_package("dplyr", type = "Suggests")
+```
 
 
 ## Description
@@ -222,7 +227,10 @@ You can add `@title` and `@description` tags:
 4. See `#' @inheritParams` for different functions with the same arguments.
 5. Add `verbose` argument for printing
 6. Use `message` (not `cat`) for printing.  Someone can use `suppressMessages` to stop the printing.
+7.  Pass `...` to a main function for additional options for the user.
 7. Have examples
+8. Learn `do.call(FUNCTION, args = list_of_arguments)`
+9. Notify/warn/message whenever you have to.
 
 
 ## NAMESPACE
@@ -244,7 +252,6 @@ The `NAMESPACE` files tells the R package what to import and export.  In Roxygen
    - you must import anything explicitly other than from the `base` package, includying anything from `stats` (e.g. `quantile`) or `graphics` (e.g. `hist`)
 
 Add `@importFrom graphics hist` to your top.R file
-
 
 ## Build and Reload
 
@@ -276,7 +283,6 @@ This will have scripts with `use_data` at the end to make the data.
 ```r
 `r pkg_name`::usethis::use_data_raw()
 ```
-
 
 ## Documenting Data
 
@@ -329,6 +335,52 @@ system.file("extdata", "asdfsdf.csv", package = "readr", mustWork = TRUE)
 ```
 
 
+## Using the file system
+
+1.  `file.path` > `paste` for paths
+2.  Use `file.exists`.  Use `any` and `all`
+3.  `file.remove` if you need to delete things
+4.  Make temporary (empty, non-existent) files, with extension: `tempfile(fileext = ".csv")`.  
+5. `dir.create` to create and `unlink` to destroy directories.
+5.  Using `tempdir` for stuff that's intermediate.  
+6.  Tempdir sub-directory: `tdir = tempfile(); dir.create(tdir); on.exit({ unlink(tdir) })`
+6. `file.copy` and `file.rename`
+7. `download.file` or `httr::GET`.
+
+
+## Unit tests
+
+The `testthat` package is great for unit testing.  Put test scripts in `tests/testthat`, always named `test-DESCRIPTOR.R`.  To set up `testthat`:
+
+```
+`r pkg_name`::use_testthat()
+```
+
+And a specific test:
+
+```
+`r pkg_name`::use_test("name of test")
+```
+
+
+**General Rule: Any package issue turns into a test.**
+
+
+## Unit tests
+
+The `testthat` package is great for unit testing.  Put test scripts in `tests/testthat`, always named `test-DESCRIPTOR.R`.  To set up `testthat`:
+
+```
+testthat::context("OVERALL DESCRIPTION OF TESTS IN THIS FILE")
+testthat::test_that("Description of this test", { MYCODE })
+testthat::expect_equal(OUTPUT, 1234.34535)
+testthat::expect_identcal(OUTPUT1, OUTPUT2)
+testthat::expect_true(SOME_OUTPUT)
+testthat::expect_silent({ no_warning_error_code })
+testthat::expect_message({ some_warn }, "a[test]regexp")
+```
+
+
 ## Continuous integration (Thoughtworks.com)
 
 > Continuous Integration (CI) is a development practice that requires developers to integrate code into a shared repository several times a day. Each check-in is then verified by an automated build, allowing teams to detect problems early.
@@ -342,7 +394,6 @@ system.file("extdata", "asdfsdf.csv", package = "readr", mustWork = TRUE)
 `r pkg_name`::use_github(protocol = "https") # must have GITHUB_PAT set up
 `r pkg_name`::use_readme_rmd()
 `r pkg_name`::use_vignette("my-vignette")
-`r pkg_name`::use_testthat()
 `r pkg_name`::use_appveyor()
 `r pkg_name`::use_travis()
 ```
