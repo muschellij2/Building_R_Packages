@@ -48,7 +48,7 @@ Go to Build -> Configure Build Tools
 
 Add `--as-cran` to "Check Package" (useful later)
 
-<img src="r_packages_figures/build_tools.png" style="width: 45%; display: block; margin: auto;">
+<img src="figures/build_tools.png" style="width: 45%; display: block; margin: auto;">
 
 
 ## Setting Up
@@ -61,7 +61,7 @@ Click Generate documents with Roxygen.  If that is gray, install `roxygen2`:
 install.packages("roxygen2")
 ```
 
-<img src="r_packages_figures/roxygen.png" style="width: 45%; display: block; margin: auto;">
+<img src="figures/roxygen.png" style="width: 45%; display: block; margin: auto;">
 
 Click "Configure" - click all the boxes.
 
@@ -155,7 +155,8 @@ Go to Code -> Insert Roxygen Skeleton
 ## Roxygen Skeleton:
 
 Output:
-```
+
+```r
 #' Title
 #'
 #' @param x 
