@@ -3103,7 +3103,7 @@ if (document.readyState !== "loading" &&
 
 <slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>What are R Packages?</h2></hgroup><article  id="what-are-r-packages">
 
-</article></slide><slide class=""><hgroup><h2>R Packages</h2></hgroup><article  id="r-packages" class="build">
+</article></slide><slide class=""><hgroup><h2>R Packages</h2></hgroup><article  class="build" id="r-packages">
 
 <ol class = 'build'>
 <li>Sets of Functions</li>
@@ -3138,6 +3138,8 @@ if (document.readyState !== "loading" &&
 <p><img src="r_packages_figures/build_tools.png" style="width: 45%; display: block; margin: auto;"></p>
 
 </article></slide><slide class=""><hgroup><h2>Setting Up</h2></hgroup><article  id="setting-up-1">
+
+<p>Documentation is a pain, but it’s worthile. Writing out argument definitions makes it easier to identify if argument names make sense.</p>
 
 <p>Click Generate documents with Roxygen. If that is gray, install <code>roxygen2</code>:</p>
 
@@ -3251,7 +3253,7 @@ if (document.readyState !== "loading" &&
 
 </article></slide><slide class=""><hgroup><h2>Roxygen Skeleton:</h2></hgroup><article  id="roxygen-skeleton-1">
 
-<p>Add <code>@title</code> and <code>@description</code> tags:</p>
+<p>You can add <code>@title</code> and <code>@description</code> tags:</p>
 
 <pre >#&#39; @title
 #&#39; @description
@@ -3295,6 +3297,18 @@ if (document.readyState !== "loading" &&
 #&#39; \dontrun{
 #&#39;    top(mat, n = 10)
 #&#39; }</pre>
+
+</article></slide><slide class=""><hgroup><h2>Functions: a little style</h2></hgroup><article  id="functions-a-little-style">
+
+<ol>
+<li>Create a file for each function (preference) or at least group. Name file function name.</li>
+<li>Optional arguments: Set to <code>NULL</code> and use <code>is.null()</code> to test</li>
+<li>Put functions together: use <code>#&#39; @rdname</code>.</li>
+<li>See <code>#&#39; @inheritParams</code> for different functions with the same arguments.</li>
+<li>Add <code>verbose</code> argument for printing</li>
+<li>Use <code>message</code> (not <code>cat</code>) for printing. Someone can use <code>suppressMessages</code> to stop the printing.</li>
+<li>Have examples</li>
+</ol>
 
 </article></slide><slide class=""><hgroup><h2>NAMESPACE</h2></hgroup><article  id="namespace">
 
@@ -3342,6 +3356,71 @@ if (document.readyState !== "loading" &&
 <li>Then try Build -&gt; Check Package</li>
 </ul>
 
+</article></slide><slide class=""><hgroup><h2>Using Data</h2></hgroup><article  id="using-data">
+
+<p>The <code>data/</code> directory is where data goes, it <strong>must</strong> be named <code>.RData</code> or <code>rda</code>.</p>
+
+<pre class = 'prettyprint lang-r'>usethis::use_data(DATAOBJECT, compress = &quot;xz&quot;)</pre>
+
+<p>The output will be <code>DATAOBJECT.rda</code> in the <code>data</code> folder. You can use this in your package</p>
+
+</article></slide><slide class=""><hgroup><h2>Making Data</h2></hgroup><article  id="making-data">
+
+<p>That’s not reproducible!</p>
+
+<p>The <code>data-raw</code> directory can be data you want to create (such as simulated data).</p>
+
+<p>This will have scripts with <code>use_data</code> at the end to make the data.</p>
+
+<pre class = 'prettyprint lang-r'>usethis::usethis::use_data_raw()</pre>
+
+</article></slide><slide class=""><hgroup><h2>Documenting Data</h2></hgroup><article  id="documenting-data">
+
+<p>Note how <code>DATAOBJECT</code> is the name of the object/rda.</p>
+
+<pre >#&#39; @title Some object to document
+#&#39;
+#&#39; @description A list containing things
+#&#39;
+#&#39; @format A list with 7 elements, which are:
+#&#39; \describe{
+#&#39; \item{x}{first thing}
+#&#39; \item{y}{second thing}
+#&#39; }
+&quot;DATAOBJECT&quot;</pre>
+
+</article></slide><slide class=""><hgroup><h2>Different kinds of data</h2></hgroup><article  id="different-kinds-of-data">
+
+<p>The <code>inst/</code> directory will copy any of the contents to the installed directory path. So if <code>blah.csv</code> was in <code>inst/</code> then it will be in the directory.</p>
+
+<p>Most times, however, people put data in <code>inst/extdata</code> to separate folders out.</p>
+
+<p>You can use <code>find.package</code> to find the installed directory:</p>
+
+<pre class = 'prettyprint lang-r'>find.package(&quot;readr&quot;)</pre>
+
+<pre >## [1] &quot;/Library/Frameworks/R.framework/Versions/3.5/Resources/library/readr&quot;</pre>
+
+<p>To get files, though, you should use <code>system.file</code>:</p>
+
+<pre class = 'prettyprint lang-r'>system.file(&quot;extdata&quot;, package = &quot;readr&quot;)</pre>
+
+<pre >## [1] &quot;/Library/Frameworks/R.framework/Versions/3.5/Resources/library/readr/extdata&quot;</pre>
+
+</article></slide><slide class=""><hgroup><h2>Different kinds of data</h2></hgroup><article  id="different-kinds-of-data-1">
+
+<p>If you pass in multiple characters, it assumes you put it together with <code>file.path</code>:</p>
+
+<pre class = 'prettyprint lang-r'>system.file(&quot;extdata&quot;, &quot;challenge.csv&quot;, package = &quot;readr&quot;)</pre>
+
+<pre >## [1] &quot;/Library/Frameworks/R.framework/Versions/3.5/Resources/library/readr/extdata/challenge.csv&quot;</pre>
+
+<p>The <code>mustWork</code> argument is useful for making sure the file exists:</p>
+
+<pre class = 'prettyprint lang-r'>system.file(&quot;extdata&quot;, &quot;asdfsdf.csv&quot;, package = &quot;readr&quot;, mustWork = TRUE)</pre>
+
+<pre >## Error in system.file(&quot;extdata&quot;, &quot;asdfsdf.csv&quot;, package = &quot;readr&quot;, mustWork = TRUE): no file found</pre>
+
 </article></slide><slide class=""><hgroup><h2>Continuous integration (Thoughtworks.com)</h2></hgroup><article  id="continuous-integration-thoughtworks.com">
 
 <blockquote>
@@ -3352,6 +3431,7 @@ if (document.readyState !== "loading" &&
 
 <pre class = 'prettyprint lang-r'>usethis::use_git()
 usethis::use_github() # must have GITHUB_PAT set up
+usethis::use_github(protocol = &quot;https&quot;) # must have GITHUB_PAT set up
 usethis::use_readme_rmd()
 usethis::use_vignette(&quot;my-vignette&quot;)
 usethis::use_testthat()

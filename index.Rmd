@@ -53,6 +53,8 @@ Add `--as-cran` to "Check Package" (useful later)
 
 ## Setting Up
 
+Documentation is a pain, but it's worthile.  Writing out argument definitions makes it easier to identify if argument names make sense.
+
 Click Generate documents with Roxygen.  If that is gray, install `roxygen2`:
 
 ```{r, eval = FALSE}
@@ -62,7 +64,6 @@ install.packages("roxygen2")
 <img src="r_packages_figures/roxygen.png" style="width: 45%; display: block; margin: auto;">
 
 Click "Configure" - click all the boxes.
-
 
 
 ## Modifying the Skeleton
@@ -164,7 +165,7 @@ Output:
 
 ## Roxygen Skeleton:
 
-Add `@title` and `@description` tags:
+You can add `@title` and `@description` tags:
 
 ```
 #' @title
@@ -211,6 +212,19 @@ Add `@title` and `@description` tags:
 ```
 
 
+
+
+## Functions: a little style
+
+1. Create a file for each function (preference) or at least group.  Name file function name.
+2. Optional arguments: Set to `NULL` and use `is.null()` to test
+3. Put functions together: use `#' @rdname`.
+4. See `#' @inheritParams` for different functions with the same arguments.
+5. Add `verbose` argument for printing
+6. Use `message` (not `cat`) for printing.  Someone can use `suppressMessages` to stop the printing.
+7. Have examples
+
+
 ## NAMESPACE
 
 The `NAMESPACE` files tells the R package what to import and export.  In Roxygen:
@@ -240,6 +254,80 @@ Add `@importFrom graphics hist` to your top.R file
     - look in the folders
 - Then try Build -> Check Package
 
+## Using Data
+
+The `data/` directory is where data goes, it **must** be named `.RData` or `rda`.
+
+```r
+`r pkg_name`::use_data(DATAOBJECT, compress = "xz")
+```
+
+The output will be `DATAOBJECT.rda` in the `data` folder.  You can use this in your package
+
+
+## Making Data
+
+That's not reproducible!
+
+The `data-raw` directory can be data you want to create (such as simulated data).
+
+This will have scripts with `use_data` at the end to make the data.
+
+```r
+`r pkg_name`::usethis::use_data_raw()
+```
+
+
+## Documenting Data
+
+Note how `DATAOBJECT` is the name of the object/rda.
+
+```
+#' @title Some object to document
+#'
+#' @description A list containing things
+#'
+#' @format A list with 7 elements, which are:
+#' \describe{
+#' \item{x}{first thing}
+#' \item{y}{second thing}
+#' }
+"DATAOBJECT"
+```
+
+
+## Different kinds of data
+
+The `inst/` directory will copy any of the contents to the installed directory path.  So if `blah.csv` was in `inst/` then it will be in the directory. 
+
+Most times, however, people put data in `inst/extdata` to separate folders out.
+
+You can use `find.package` to find the installed directory:
+
+```{r}
+find.package("readr")
+```
+
+To get files, though, you should use `system.file`:
+
+```{r}
+system.file("extdata", package = "readr")
+```
+
+## Different kinds of data
+
+If you pass in multiple characters, it assumes you put it together with `file.path`:
+
+```{r}
+system.file("extdata", "challenge.csv", package = "readr")
+```
+
+The `mustWork` argument is useful for making sure the file exists:
+
+```{r, error=TRUE}
+system.file("extdata", "asdfsdf.csv", package = "readr", mustWork = TRUE)
+```
+
 
 ## Continuous integration (Thoughtworks.com)
 
@@ -251,6 +339,7 @@ Add `@importFrom graphics hist` to your top.R file
 ```r
 `r pkg_name`::use_git()
 `r pkg_name`::use_github() # must have GITHUB_PAT set up
+`r pkg_name`::use_github(protocol = "https") # must have GITHUB_PAT set up
 `r pkg_name`::use_readme_rmd()
 `r pkg_name`::use_vignette("my-vignette")
 `r pkg_name`::use_testthat()
