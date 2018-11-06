@@ -172,7 +172,7 @@ Output:
 
 You can add `@title` and `@description` tags:
 
-```
+```r
 #' @title
 #' @description
 #'
@@ -197,7 +197,7 @@ You can add `@title` and `@description` tags:
 
 ## Roxygen Skeleton:
 
-```
+```r
 #' @title Print the top of a matrix
 #' @description \code{top} is a small function to not just present the first rows
 #' of a matrix, but also the first number of columns
@@ -288,7 +288,7 @@ This will have scripts with `use_data` at the end to make the data.
 
 Note how `DATAOBJECT` is the name of the object/rda.
 
-```
+```r
 #' @title Some object to document
 #'
 #' @description A list containing things
@@ -352,25 +352,25 @@ system.file("extdata", "asdfsdf.csv", package = "readr", mustWork = TRUE)
 
 The `testthat` package is great for unit testing.  Put test scripts in `tests/testthat`, always named `test-DESCRIPTOR.R`.  To set up `testthat`:
 
-```
+```r
 `r pkg_name`::use_testthat()
 ```
 
 And a specific test:
 
-```
+```r
 `r pkg_name`::use_test("name of test")
 ```
 
 
-**General Rule: Any package issue turns into a test.**
+### **General Rule: Any package issue turns into a test.**
 
 
 ## Unit tests
 
 The `testthat` package is great for unit testing.  Put test scripts in `tests/testthat`, always named `test-DESCRIPTOR.R`.  To set up `testthat`:
 
-```
+```r
 testthat::context("OVERALL DESCRIPTION OF TESTS IN THIS FILE")
 testthat::test_that("Description of this test", { MYCODE })
 testthat::expect_equal(OUTPUT, 1234.34535)

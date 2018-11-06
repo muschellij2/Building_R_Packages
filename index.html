@@ -3258,7 +3258,7 @@ usethis::use_package(&quot;dplyr&quot;, type = &quot;Suggests&quot;)</pre>
 
 <p>You can add <code>@title</code> and <code>@description</code> tags:</p>
 
-<pre >#&#39; @title
+<pre class = 'prettyprint lang-r'>#&#39; @title
 #&#39; @description
 #&#39;
 #&#39; @param x 
@@ -3284,7 +3284,7 @@ usethis::use_package(&quot;dplyr&quot;, type = &quot;Suggests&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Roxygen Skeleton:</h2></hgroup><article  id="roxygen-skeleton-3">
 
-<pre >#&#39; @title Print the top of a matrix
+<pre class = 'prettyprint lang-r'>#&#39; @title Print the top of a matrix
 #&#39; @description \code{top} is a small function to not just present the first rows
 #&#39; of a matrix, but also the first number of columns
 #&#39;
@@ -3384,7 +3384,7 @@ usethis::use_package(&quot;dplyr&quot;, type = &quot;Suggests&quot;)</pre>
 
 <p>Note how <code>DATAOBJECT</code> is the name of the object/rda.</p>
 
-<pre >#&#39; @title Some object to document
+<pre class = 'prettyprint lang-r'>#&#39; @title Some object to document
 #&#39;
 #&#39; @description A list containing things
 #&#39;
@@ -3445,19 +3445,19 @@ usethis::use_package(&quot;dplyr&quot;, type = &quot;Suggests&quot;)</pre>
 
 <p>The <code>testthat</code> package is great for unit testing. Put test scripts in <code>tests/testthat</code>, always named <code>test-DESCRIPTOR.R</code>. To set up <code>testthat</code>:</p>
 
-<pre >usethis::use_testthat()</pre>
+<pre class = 'prettyprint lang-r'>usethis::use_testthat()</pre>
 
 <p>And a specific test:</p>
 
-<pre >usethis::use_test(&quot;name of test&quot;)</pre>
+<pre class = 'prettyprint lang-r'>usethis::use_test(&quot;name of test&quot;)</pre>
 
-<p><strong>General Rule: Any package issue turns into a test.</strong></p>
+<h3><strong>General Rule: Any package issue turns into a test.</strong></h3>
 
 </article></slide><slide class=""><hgroup><h2>Unit tests</h2></hgroup><article  id="unit-tests-1">
 
 <p>The <code>testthat</code> package is great for unit testing. Put test scripts in <code>tests/testthat</code>, always named <code>test-DESCRIPTOR.R</code>. To set up <code>testthat</code>:</p>
 
-<pre >testthat::context(&quot;OVERALL DESCRIPTION OF TESTS IN THIS FILE&quot;)
+<pre class = 'prettyprint lang-r'>testthat::context(&quot;OVERALL DESCRIPTION OF TESTS IN THIS FILE&quot;)
 testthat::test_that(&quot;Description of this test&quot;, { MYCODE })
 testthat::expect_equal(OUTPUT, 1234.34535)
 testthat::expect_identcal(OUTPUT1, OUTPUT2)
