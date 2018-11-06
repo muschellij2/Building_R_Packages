@@ -41,7 +41,7 @@ In RStudio, File -> New Project -> New Directory -> R Package, with a name:
 pkg_name = "usethis"
 ```
 
-## Starting Up
+## Checking Package Names
 
 
 Try the `available::available` function:
