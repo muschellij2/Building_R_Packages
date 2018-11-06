@@ -2,7 +2,7 @@
 title: "Building R Packages"
 output: 
   ioslides_presentation:
-    widescreen: yes
+    widescreen: true
 ---
 
 ```{r setup, include=FALSE}
@@ -37,9 +37,17 @@ In RStudio, File -> New Project -> New Directory -> R Package, with a name:
 - can have numbers
 
 
-
 ```{r, eval = TRUE, echo = FALSE}
 pkg_name = "usethis"
+```
+
+## Starting Up
+
+
+Try the `available::available` function:
+
+```{r}
+available::available("ggplot")
 ```
 
 ## Setting Up
