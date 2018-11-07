@@ -20,6 +20,9 @@ knitr::opts_chunk$set(echo = TRUE)
 > 5.  Set of Functions + Documentation + Data + Vignettes + Versions
 > 6.  Set of Functions + Documentation + Data + Vignettes + Versions + Dependencies
 
+## Windows and RTools
+
+If you have a Windows machine, you need to install RTools from https://cran.r-project.org/bin/windows/Rtools/ (choose the frozen one).  
 
 ## Starting Up
 
@@ -455,7 +458,6 @@ src = "https://travis-ci.com/GITHUB_USERNAME/REPO.svg?branch=master",
 href = "https://travis-ci.com/GITHUB_USERNAME/REPO")
 ```
 
-
 to the `README.Rmd`. 
 
 
@@ -464,7 +466,7 @@ to the `README.Rmd`.
 - S3 - simple - just say `class(x) = "myS3Class"`
   - Usually List of objects
   - http://adv-r.had.co.nz/S3.html
-- S4 - more complex  - 
+- S4 - more complex  - see `new`
   - name, representation (slots), and inheritance (does it act like an array/list)
   - http://adv-r.had.co.nz/S4.html
 - Reference Classes
