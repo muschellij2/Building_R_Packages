@@ -364,6 +364,19 @@ system.file("extdata", "asdfsdf.csv", package = "readr", mustWork = TRUE)
 6. `file.copy` and `file.rename`
 7. `download.file` or `httr::GET`.
 
+## Vignettes
+
+- http://r-pkgs.had.co.nz/vignettes.html
+
+A package has data + code + dependencies.  A vignette can tie this together to tell you **how** to use the package.  Typically it is an analysis.
+
+- **THIS IS EXACTLY WHAT A REPRODUCIBLE PAPER IS!**
+
+```r
+`r pkg_name`::use_vignette("my-vignette")
+```
+
+- Can make private packages that are the workflow for your paper
 
 ## Unit tests
 
@@ -410,7 +423,6 @@ testthat::expect_message({ some_warn }, "a[test]regexp")
 `r pkg_name`::use_github() # must have GITHUB_PAT set up
 `r pkg_name`::use_github(protocol = "https") # must have GITHUB_PAT set up
 `r pkg_name`::use_readme_rmd()
-`r pkg_name`::use_vignette("my-vignette")
 `r pkg_name`::use_appveyor()
 `r pkg_name`::use_travis()
 ```
