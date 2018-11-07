@@ -126,6 +126,7 @@ I use `Authors@R` even if there is only one author because of the [`desc` packag
 
 ## DESCRIPTION file: additional fields
 
+- You do not use `library` or `require` in functions in a package
 - Imports: package1, package2
   - packages with specific functions called in package
   - Anything other than `base` package needs to be imported (`stats`, `methods`)
@@ -133,6 +134,7 @@ I use `Authors@R` even if there is only one author because of the [`desc` packag
   - packages with **ALL** functions loaded from package
 - Suggests: package4, package6
   - used in **examples** or **vignettes**
+
   
 ```r
 `r pkg_name`::use_package("tidyr", type = "Imports")
