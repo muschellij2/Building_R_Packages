@@ -3129,7 +3129,7 @@ if (document.readyState !== "loading" &&
 <li>can have numbers</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Starting Up</h2></hgroup><article  id="starting-up-1">
+</article></slide><slide class=""><hgroup><h2>Checking Package Names</h2></hgroup><article  id="checking-package-names">
 
 <p>Try the <code>available::available</code> function:</p>
 
@@ -3138,7 +3138,7 @@ if (document.readyState !== "loading" &&
 <pre >## Warning: &#39;BiocInstaller&#39; and &#39;biocLite()&#39; are deprecated, use the &#39;BiocManager&#39;
 ##   CRAN package instead.</pre>
 
-<pre >## ── ggplot ──────────────────────────────────────────────────────
+<pre >## ── ggplot ──────────────────────────────────────────────────────────
 ## Name valid: ✔
 ## Available on CRAN: ✖ 
 ## Available on Bioconductor: ✔
@@ -3221,8 +3221,12 @@ if (document.readyState !== "loading" &&
 </article></slide><slide class=""><hgroup><h2>DESCRIPTION file: additional fields</h2></hgroup><article  id="description-file-additional-fields">
 
 <ul>
-<li>Imports: package1, package2</li>
+<li>Imports: package1, package2
+
+<ul>
 <li>packages with specific functions called in package</li>
+<li>Anything other than <code>base</code> package needs to be imported (<code>stats</code>, <code>methods</code>)</li>
+</ul></li>
 <li>Depends: package3, package5
 
 <ul>
@@ -3386,7 +3390,7 @@ usethis::use_package(&quot;dplyr&quot;, type = &quot;Suggests&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Using Data</h2></hgroup><article  id="using-data">
 
-<p>The <code>data/</code> directory is where data goes, it <strong>must</strong> be named <code>.RData</code> or <code>rda</code>.</p>
+<p>The <code>data/</code> directory is where data goes, it <strong>must</strong> be named <code>.RData</code> or <code>rda</code>. The <code>use_data</code> function can do this for you:</p>
 
 <pre class = 'prettyprint lang-r'>usethis::use_data(DATAOBJECT, compress = &quot;xz&quot;)</pre>
 
@@ -3404,7 +3408,7 @@ usethis::use_package(&quot;dplyr&quot;, type = &quot;Suggests&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Documenting Data</h2></hgroup><article  id="documenting-data">
 
-<p>Note how <code>DATAOBJECT</code> is the name of the object/rda.</p>
+<p>Note how <code>DATAOBJECT</code> is the name of the object/rda. Now we can document the data as follows:</p>
 
 <pre class = 'prettyprint lang-r'>#&#39; @title Some object to document
 #&#39;
@@ -3536,7 +3540,62 @@ after_success:
 src = &quot;https://travis-ci.com/GITHUB_USERNAME/REPO.svg?branch=master&quot;, 
 href = &quot;https://travis-ci.com/GITHUB_USERNAME/REPO&quot;)</pre>
 
-<p>to the <code>README.Rmd</code>.</p></article></slide>
+<p>to the <code>README.Rmd</code>.</p>
+
+</article></slide><slide class=""><hgroup><h2>S3, S4, Reference Classes</h2></hgroup><article  id="s3-s4-reference-classes">
+
+<ul>
+<li>S3 - simple - just say <code>class(x) = &quot;myS3Class&quot;</code>
+
+<ul>
+<li>Usually List of objects</li>
+<li><a href='http://adv-r.had.co.nz/S3.html' title=''>http://adv-r.had.co.nz/S3.html</a></li>
+</ul></li>
+<li>S4 - more complex -
+
+<ul>
+<li>name, representation (slots), and inheritance (does it act like an array/list)</li>
+<li><a href='http://adv-r.had.co.nz/S4.html' title=''>http://adv-r.had.co.nz/S4.html</a></li>
+</ul></li>
+<li>Reference Classes
+
+<ul>
+<li>very different, <code>class$method()</code></li>
+<li><a href='http://adv-r.had.co.nz/R5.html' title=''>http://adv-r.had.co.nz/R5.html</a></li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>S3, S4 Methods</h2></hgroup><article  id="s3-s4-methods">
+
+<ul>
+<li>S3 :<code>bar &lt;- function(y) UseMethod(&quot;bar&quot;, y)</code>
+
+<ul>
+<li><code>bar.myS3Class</code> will allow you to use <code>bar(x)</code></li>
+</ul></li>
+<li>S4 :<code>setGeneric(&quot;myGeneric&quot;, function(x) standardGeneric(&quot;myGeneric&quot;))</code></li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>setMethod(&quot;myGeneric&quot;, signature(x = &quot;myS3Class&quot;), function(x, y) {
+ x@slot + y
+})</pre>
+
+</article></slide><slide class=""><hgroup><h2>Compiled Code: C and C++</h2></hgroup><article  id="compiled-code-c-and-c">
+
+<p>See <a href='http://r-pkgs.had.co.nz/src.html' title=''>http://r-pkgs.had.co.nz/src.html</a></p>
+
+<ul>
+<li>The <code>src/</code> folder has compiled code.</li>
+<li><code>cleanup</code> generally deletes intermediate or downloaded files run in <code>configure</code>.</li>
+<li><code>configure</code> runs code before <code>make</code> is run</li>
+<li><code>Makevars</code> or a <code>Makefile</code> gives direction for compiling code</li>
+<li>There are <code>configure.win</code> and <code>Makevars.win</code> for Windows-specific setup.</li>
+<li>See<code>.Call</code> for calling these compiled functions.</li>
+</ul>
+
+<p>Using <code>Rcpp</code> is a different framework.</p>
+
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Questions?</h2></hgroup><article  id="questions"></article></slide>
 
 
   <slide class="backdrop"></slide>

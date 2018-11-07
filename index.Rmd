@@ -46,8 +46,12 @@ pkg_name = "usethis"
 
 Try the `available::available` function:
 
-```{r}
+```{r, echo = TRUE, eval = FALSE}
 available::available("ggplot")
+```
+
+```{r, echo = FALSE, eval = TRUE}
+available::available("ggplot", browse = FALSE)
 ```
 
 ## Setting Up
@@ -120,7 +124,8 @@ I use `Authors@R` even if there is only one author because of the [`desc` packag
 ## DESCRIPTION file: additional fields
 
 - Imports: package1, package2
-- packages with specific functions called in package
+  - packages with specific functions called in package
+  - Anything other than `base` package needs to be imported (`stats`, `methods`)
 - Depends: package3, package5
   - packages with **ALL** functions loaded from package
 - Suggests: package4, package6
@@ -272,7 +277,7 @@ Add `@importFrom graphics hist` to your top.R file
 
 ## Using Data
 
-The `data/` directory is where data goes, it **must** be named `.RData` or `rda`.
+The `data/` directory is where data goes, it **must** be named `.RData` or `rda`. The `use_data` function can do this for you:
 
 ```r
 `r pkg_name`::use_data(DATAOBJECT, compress = "xz")
@@ -295,7 +300,7 @@ This will have scripts with `use_data` at the end to make the data.
 
 ## Documenting Data
 
-Note how `DATAOBJECT` is the name of the object/rda.
+Note how `DATAOBJECT` is the name of the object/rda.   Now we can document the data as follows:
 
 ```r
 #' @title Some object to document
@@ -454,7 +459,43 @@ href = "https://travis-ci.com/GITHUB_USERNAME/REPO")
 to the `README.Rmd`. 
 
 
+## S3, S4, Reference Classes
+
+- S3 - simple - just say `class(x) = "myS3Class"`
+  - Usually List of objects
+  - http://adv-r.had.co.nz/S3.html
+- S4 - more complex  - 
+  - name, representation (slots), and inheritance (does it act like an array/list)
+  - http://adv-r.had.co.nz/S4.html
+- Reference Classes
+  - very different, `class$method()`
+  - http://adv-r.had.co.nz/R5.html
+  
+## S3, S4 Methods
+
+- S3 :`bar <- function(y) UseMethod("bar", y)`
+  - `bar.myS3Class` will allow you to use `bar(x)`
+- S4 :`setGeneric("myGeneric", function(x) standardGeneric("myGeneric"))`
+```r
+setMethod("myGeneric", signature(x = "myS3Class"), function(x, y) {
+ x@slot + y
+})
+```
 
 
+## Compiled Code: C and C++
+
+See http://r-pkgs.had.co.nz/src.html
+
+- The `src/` folder has compiled code. 
+- `cleanup` generally deletes intermediate or downloaded files run in `configure`.
+- `configure` runs code before `make` is run
+- `Makevars` or a `Makefile` gives direction for compiling code
+- There are `configure.win` and `Makevars.win` for Windows-specific setup.
+- See`.Call` for calling these compiled functions.
+
+Using `Rcpp` is a different framework.
+
+# Questions?
 
 
