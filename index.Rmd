@@ -57,7 +57,7 @@ Try the `available::available` function:
 available::available("ggplot")
 ```
 
-```{r run_avail, echo = FALSE, eval = TRUE}
+```{r run_avail, echo = FALSE, eval = TRUE, cache = TRUE}
 available::available("ggplot", browse = FALSE)
 ```
 
@@ -69,10 +69,29 @@ Add `--as-cran` to "Check Package" (useful later)
 
 <img src="figures/build_tools.png" style="width: 45%; display: block; margin: auto;">
 
+## Documentation is a pain
 
-## Setting Up
+...but it's worthwhile.  Writing out argument definitions makes it easier to identify if argument names make sense.
 
-Documentation is a pain, but it's worthwhile.  Writing out argument definitions makes it easier to identify if argument names make sense.
+```{r, echo = FALSE, out.width="32%", fig.align='center'}
+knitr::include_graphics("figures/docs.jpg")
+```
+
+<p style="font-size: 14pt">From https://imgflip.com/i/4mvkhl</p>
+
+
+## Documentation is a pain
+
+
+```{r, echo = FALSE, out.width="100%"}
+knitr::include_graphics("figures/collab.png")
+```
+<p style="font-size: 18pt">https://twitter.com/kcranstn/status/370914072511791104</p>
+
+
+
+
+## Use Roxygen2
 
 Click Generate documents with Roxygen.  If that is gray, install `roxygen2`:
 
@@ -105,6 +124,10 @@ In the RStudio project, go to "Go to file/function" search bar on the menu bar.
 
 Type "DESCRIPTION" and open that file.
 
+```{r plot, out.width="60%", echo = FALSE, fig.align='center'}
+knitr::include_graphics("figures/file_func.png")
+```
+
 ## DESCRIPTION file
 
 - "Title - What the Package Does (Title Case)
@@ -115,15 +138,6 @@ Type "DESCRIPTION" and open that file.
 - "License: ", one of GPL-2 GPL-3 LGPL-2 LGPL-2.1 LGPL-3 AGPL-3 Artistic-2.0
 BSD_2_clause BSD_3_clause MIT
 
-## License
-
-`` `r pkg_name`::use_gpl3_license("John Muschelli") ``
-
-- https://www.r-project.org/Licenses/
-
-```{r, echo = FALSE, out.width="100%"}
-knitr::include_graphics("figures/licenses.png")
-```
 
 ## Authors
 
@@ -137,6 +151,17 @@ Authors@R: c(person(given = "John",
 ```
 
 Use `Authors@R` even if there is only one author.
+
+
+## License
+
+`` `r pkg_name`::use_gpl3_license("John Muschelli") ``
+
+- https://www.r-project.org/Licenses/
+
+```{r, echo = FALSE, out.width="100%"}
+knitr::include_graphics("figures/licenses.png")
+```
 
 
 ## DESCRIPTION file: additional fields
@@ -159,7 +184,14 @@ Use `Authors@R` even if there is only one author.
 
 ## Description
 
-Change the `Description` so that it's a sentence and it ends with a period.  Also I keep putting single quotes around weird words (like science-specific).  Make sure to put links in angle brackets (`<http...>`).  Use DOIs if you can.  If you go too long on a line, indent it with 4 spaces `"    "`.
+- Change the `Description` so that it's a sentence and it ends with a period.  
+- Pu single quotes around weird words (like science-specific).  
+- Make sure to put links in angle brackets (`<http...>`).  Use DOIs if you can.  
+- If you go too long on a line, indent it with 4 spaces `"    "`.  
+
+```{r, echo = FALSE, out.width="70%", fig.align="center"}
+knitr::include_graphics("figures/desc.png")
+```
 
 
 ## Roxygen2
@@ -185,9 +217,7 @@ top = function(x, n) {
 
 Go to Code -> Insert Roxygen Skeleton
 
-## Roxygen Skeleton:
-
-Output:
+## Roxygen Skeleton Output
 
 ```r
 #' Title
@@ -197,9 +227,15 @@ Output:
 #'
 #' @return
 #' @export
-#'
 #' @examples
 ```
+
+> - `@param` stands for a parameter/argument for that function.  
+> - `@return` denotes what the function returns.  This is required.  
+> - `@export` - when people install your package, can they use this function
+>   - non-exported functions are usually helpers, really small, or not fully formed yet
+> - `@examples` - code to show how the function works.  Wrap functions in `\dontrun{}` if not wanted to run
+
 
 
 ## Roxygen Skeleton:
@@ -219,14 +255,6 @@ You can add `@title` and `@description` tags:
 #' @examples
 ```
 
-
-## Roxygen Skeleton:
-
-> - `@param` stands for a parameter/argument for that function.  
-> - `@return` denotes what the function returns.  This is required.  
-> - `@export` - when people install your package, can they use this function
->   - non-exported functions are usually helpers, really small, or not fully formed yet
-> - `@examples` - code to show how the function works.  Wrap functions in `\dontrun{}` if not wanted to run
 
 
 ## Roxygen Skeleton:
@@ -259,10 +287,10 @@ You can add `@title` and `@description` tags:
 2. Optional arguments: Set to `NULL` and use `is.null()` to test
 3. Put functions together: use `#' @rdname`.
 4. See `#' @inheritParams` for different functions with the same arguments.
-5. Add `verbose` argument for printing
+5. Add logical `verbose` argument for printing
 6. Use `message` (not `cat`) for printing.  Someone can use `suppressMessages` to stop the printing.
-7.  Pass `...` to a main function for additional options for the user.
-7. Have examples
+7. Pass `...` to a main function for additional options for the user.
+7. Have examples (vignette too)
 8. Learn `do.call(FUNCTION, args = list_of_arguments)`
 9. Notify/warn/message whenever you have to.
 
@@ -286,6 +314,25 @@ The `NAMESPACE` files tells the R package what to import and export.  In Roxygen
    - you must import anything explicitly other than from the `base` package, includying anything from `stats` (e.g. `quantile`) or `graphics` (e.g. `hist`)
 
 Add `@importFrom graphics hist` to your top.R file
+
+## NAMESPACE - alternative
+
+```{r, echo = FALSE, out.width="100%"}
+knitr::include_graphics("figures/import.png")
+```
+
+For every function you're using from a package, use `package::function()`
+
+- Preferred way, especially only using infrequently
+- Don't need an `@import` or `@importFrom` tag
+- Annoying with frequent functions (e.g. `dplyr`), so you can use `import`
+
+```{r, eval = FALSE}
+usethis::use_pipe()
+```
+
+
+
 
 ## Build and Reload
 
@@ -371,15 +418,15 @@ system.file("extdata", "asdfsdf.csv", package = "readr", mustWork = TRUE)
 
 ## Using the file system
 
-1.  `file.path` > `paste` for paths
+1.  `file.path` > `paste` for paths (or `fs` package)
 2.  Use `file.exists`.  Use `any` and `all`
 3.  `file.remove` if you need to delete things
 4.  Make temporary (empty, non-existent) files, with extension: `tempfile(fileext = ".csv")`.  
 5. `dir.create` to create and `unlink` to destroy directories.
-5.  Using `tempdir` for stuff that's intermediate.  
+5.  Using `tempdir()` for stuff that's intermediate.  
 6.  Tempdir sub-directory: `tdir = tempfile(); dir.create(tdir); on.exit({ unlink(tdir) })`
 6. `file.copy` and `file.rename`
-7. `download.file` or `httr::GET`.
+7. `download.file` or `curl::curl_download`
 
 ## Vignettes
 
@@ -427,22 +474,74 @@ testthat::expect_silent({ no_warning_error_code })
 testthat::expect_message({ some_warn }, "a[test]regexp")
 ```
 
+## Code Coverage: % Code covered in tests
+
+Use `covr` package:
+```{r, eval = FALSE}
+covr::package_coverage() # run tests
+covr::report() # get a report
+covr::report(covr::package_coverage(type = "all")) # run them all
+```
+
+```{r, echo = FALSE, out.width="65%", fig.align="center"}
+knitr::include_graphics("figures/report.png")
+```
+
+## Process
+
+- Go to Build → Load All to load all functions
+- Change your code, write functions
+- Build → Check Package
+- Fix errors/notes
+- Make tests
+- Check code coverage
+- Iterate
+
+# That's a lot of it - next slides are gravy
+
+
+
+
+## Checking Packages in the Past
+
+**"But does it work on someone else's machine or just mine?"**
+
+```{r, echo = FALSE, out.width="50%", fig.align='center'}
+knitr::include_graphics("figures/ask-friend-to-check-my-package-why-arent-they-done-yet.jpg")
+```
+<br><br>
+<p style="font-size: 14pt">https://memegenerator.net/instance/85107524/thinking-stick-man-ask-friend-to-check-my-package-why-arent-they-done-yet</p>
+
 
 ## Continuous integration (Thoughtworks.com)
 
 > Continuous Integration (CI) is a development practice that requires developers to integrate code into a shared repository several times a day. Each check-in is then verified by an automated build, allowing teams to detect problems early.
 
+<div class="columns-2">
+
+```{r travis, echo = FALSE, out.width="80%"}
+knitr::include_graphics("figures/travis_logo.png")
+```
+
+```{r appv, echo = FALSE, out.width="100%"}
+knitr::include_graphics("figures/appveyor.png")
+```
+
+```{r gh, echo = FALSE, out.width="100%"}
+knitr::include_graphics("figures/github-logo.png")
+```
+</div>
 
 ##  Building CI and README
 
 ```r
-`r pkg_name`::use_git()
+`r pkg_name`::use_git() # make a Git repo
 `r pkg_name`::use_github() # must have GITHUB_PAT set up
 `r pkg_name`::use_github(protocol = "https") # must have GITHUB_PAT set up
-`r pkg_name`::use_readme_rmd()
+`r pkg_name`::use_readme_rmd() # make a readme
 `r pkg_name`::use_github_action_check_standard()
-`r pkg_name`::use_appveyor()
-`r pkg_name`::use_travis()
+`r pkg_name`::use_appveyor() # Windows - or use github action
+`r pkg_name`::use_travis()  # Linux/OSX - or use github action
 ```
 
 ## GitHub Actions - Build all 3 OSes
@@ -454,8 +553,20 @@ knitr::include_graphics("figures/actions.png")
 ```
 
 
-## Configuring Travis 
+## GitHub Actions 
 
+```r
+`r pkg_name`::use_github_action_check_standard()
+```
+
+- adds file to `.github/workflows/`
+
+```{r, echo = FALSE, out.width="100%"}
+knitr::include_graphics("figures/action_check.png")
+```
+
+
+## Configuring Travis 
 
 In `.travis.yml`, add the following lines:
 
@@ -482,14 +593,15 @@ environment:
 
 ## Adding to the `README.Rmd`
  
-Add the following lines, changing `GITHUB_USERNAME/REPO` to the correct version
+These function adds following lines, changing `GITHUB_USERNAME/REPO` to the correct version
 
 ```
+[![R build status](https://github.com/GITHUB_USERNAME/REPO/workflows/R-CMD-check/badge.svg)](https://github.com/GITHUB_USERNAME/REPO/actions)
 [![Travis-CI Build Status](https://travis-ci.com/GITHUB_USERNAME/REPO.svg?branch=master)](https://travis-ci.com/GITHUB_USERNAME/REPO)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/GITHUB_USERNAME/REPO?branch=master&svg=true)](https://ci.appveyor.com/project/GITHUB_USERNAME/REPO)
 ```
 
-or can use:
+or a general badge:
 
 ```r
 `r pkg_name`::use_badge("Travis-CI Build Status", 
